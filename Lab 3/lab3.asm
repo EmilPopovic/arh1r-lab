@@ -12,6 +12,7 @@
 
             addi    s3, x0, 0b00000011      ; pritisnuta i tipka i sklopka
             addi    s4, x0, 13              ; za provjeriti brojac <= 12 (brojac < 13)
+            addi    s5, x0, 0b00000001      ; pritisnuta tipka
 
             addi    x17, x0, 0              ; x17 := brojac pritisaka tipke
 
@@ -26,6 +27,10 @@ petlja      lw      t6, 0(s2)               ; t6 := sadrzaj GPIO2_PA_DR
 
 nastavi     jal     ra, obradi              ; u (x10, x11) upisi ascii od (jedinice, desetice)
             jal     ra, ispisi              ; na lcd ispisi broj zapisan u x10 i x11
+
+cekaj       lw      t6, 0(s2)               ; cekaj da se tipka otpusti
+            and     t1, t6, s5
+            beq     t1, s5, cekaj
 
             beq     x0, x0, petlja          ; nastavi
 
